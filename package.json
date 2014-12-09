@@ -1,0 +1,34 @@
+{
+  "name": "unidades-federativas-br",
+  "version": "0.1.0",
+  "description": "Scripts and data about Federal Units of Brazil",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/mapaslivres/unidades-federativas-br"
+  },
+  "keywords": [
+    "openstreetmap",
+    "wikipedia",
+    "Brazil",
+    "Brasil",
+    "states",
+    "federal-district",
+    "estados",
+    "distrito-federal"
+  ],
+  "author": "Vitor George <vitor.george@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mapaslivres/unidades-federativas-br/issues"
+  },
+  "homepage": "https://github.com/mapaslivres/unidades-federativas-br",
+  "dependencies": {
+    "commander": "^2.5.0",
+    "request": "^2.49.0",
+    "underscore": "^1.7.0"
+  }
+}
