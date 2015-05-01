@@ -16,7 +16,7 @@ Clone o repositório em um diretório local, por exemplo:
     cd ~/data
     git clone https://github.com/mapaslivres/estados
 
-Entre no diretório e instale os módulos de [Node.js](www.nodejs.org), que você já deve ter instalado:
+Você deve ter o [Node.js](www.nodejs.org) instalado. Entre no diretório e instale as dependências:
 
     cd estados
     npm install
