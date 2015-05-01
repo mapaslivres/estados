@@ -1,7 +1,0 @@
-area[boundary=administrative][name="Brasil"];
-(
-  rel
-  ["boundary"="administrative"]
-  ["admin_level"="4"]
-);
-(._;>;);

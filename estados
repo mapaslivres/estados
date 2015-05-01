@@ -1,0 +1,100 @@
+#!/usr/bin/env node
+
+/**
+* Module dependencies.
+*/
+
+var fs = require('fs');
+var program = require('commander');
+var request = require('request');
+var _ = require('underscore');
+var Q = require('q');
+var async = require('async');
+var OSMDb = require('./lib/osmdb');
+var ProgressBar = require('progress');
+var db = new OSMDb();
+
+// Clear log
+// var errorFile = './error.log';
+// if (fs.existsSync(errorFile)) { fs.unlink(errorFile); }
+
+
+// Setup logger
+// var winston = require('winston');
+// winston.add(winston.transports.File, { level: 'error', filename: './error.log' , json: false});
+
+
+
+var filePath = './data/estados';
+
+program
+.version('0.1.0')
+.option('-c, --cache', 'Cache OpenStreetMap data locally')
+.option('-v, --verify', 'Verify for errors in OSM data and log errors to a errors.log.')
+.option('-u, --update', 'Update files from OSM data, if there is no errors.')
+.parse(process.argv);
+
+var relation_ids = [421151,302819,336819,331463,332924,185579,301079,302635,301464,303702,303781,303940,362413,57963,54882,315173,326266,332476,325866,333597,334443,334051,242620,296584,297640,298204];
+
+
+var errors = [];
+var warnings = [];
+
+
+if (program.cache) {
+
+  console.log('Caching data from OpenStreetMap:')
+
+  var bar = new ProgressBar('   Download: [:bar] :percent :etas', {
+    complete: '=',
+    incomplete: ' ',
+    width: 30,
+    total: relation_ids.length
+  });
+
+  async.eachSeries(relation_ids, function(id, doneDownloadRelation){
+    db.updateRelation(id, function(err){
+      bar.tick();
+      doneDownloadRelation();
+    });
+  }, function(err){
+    if (err) return console.log(err);
+    console.log('Download success.');
+    db.saveToFile(filePath+'.osm.json', function(){
+      console.log('Saved cached data in file '+ filePath + '.osm.json');
+    })
+  });
+
+}
+
+if (program.verify) {
+  console.log('Checking OSM data...');
+
+  db.loadFromFile(filePath + '.osm.json', function(err){
+    if (err) console.log(err.message)
+    else db.checkAllRelations();
+  });
+}
+
+
+if (program.update) {
+  console.log('Reading OSM data...');
+
+  var bar = new ProgressBar('Parsing data: [:bar] :percent :etas', {
+    complete: '=',
+    incomplete: ' ',
+    width: 30,
+    total: relation_ids.length
+  });
+
+
+  db.loadFromFile(filePath+'.osm.json', function(err){
+    if (err) console.log(err.message)
+    else db.toGeoJSON(filePath+'.geojson');
+  });
+
+  db.loadFromFile(filePath+'.osm.json', function(err){
+    if (err) console.log(err.message)
+      else db.updateCSV(filePath+'.csv');
+  });
+}

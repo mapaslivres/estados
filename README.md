@@ -1,29 +1,36 @@
-# Brazilian States
+# Estados brasileiros
 
-Data about Brazilian federatives units.
+Informações básicas sobre estados brasileiros em [CSV](https://en.wikipedia.org/wiki/Comma-separated_values) e  [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON), formatos de dados abertos.
 
-## Download data
+* [estados.csv]
+* [estados.geojson]
 
-Choose a format:
+Os dados são do OpenStreetMap e estão sob licença [Open Database License (ODbL)](http://wiki.openstreetmap.org/wiki/Open_Database_License).
 
-* CSV
-* TopoJSON
 
-You can transform this data to shapefile or GeoJSON in geojson.io accessing this link.
+## Atualizando os dados
 
-## Updating data
+Clone o repositório em um diretório local, por exemplo:
 
-Raw data is downloaded from OpenStreetMap using a Overpass query:
+    mkdir data
+    cd ~/data
+    git clone https://github.com/mapaslivres/estados
 
-```
-[out:json];
-area[boundary=administrative][name="Brasil"];
-(
-  rel
-  ["boundary"="administrative"]
-  ["admin_level"="4"]
-  ({{bbox}});
-);
-(._;>;);
-out qt;
-```  
+Entre no diretório e instale os módulos de [Node.js](www.nodejs.org), que você já deve ter instalado:
+
+    cd estados
+    npm install
+
+Baixe os dados do OpenStreetMap:
+
+    ./estados --cache
+
+Atualize os dados atuais com os dados do OpenStreetMap:
+
+    ./estados --update
+
+Se houver algum erro com a geometria da relação de fronteira do estado no OpenStreetMap, o arquivo [estados.csv] será atualizado e o [estados.geojson] será mantido na última versão, que não deve ter erros.
+
+
+[estados.csv]: (data/estados.csv)
+[estados.geojson]: (data/estados.geojson)
